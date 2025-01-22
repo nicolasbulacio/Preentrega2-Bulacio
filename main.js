@@ -23,8 +23,8 @@ let cursado=[alumno1,alumno2,alumno3,alumno4,alumno5]
 
 //Local storage
 
-if(localStorage.getItem(estudiante)){
-    cursado=JSON.parse(localStorage.getItem(estudiante))
+if(localStorage.getItem(Alumno)){
+    cursado=JSON.parse(localStorage.getItem(Alumno))
 }else{
     cursado=cursado
 }
@@ -41,7 +41,7 @@ function agregarAlumnos(){
 
     let alumno=new Alumno (nombre,edad,nota1,nota2,nota3)
     cursado.push(alumno)
-    localStorage.setItem("estudiante",JSON.stringify(cursado))
+    localStorage.setItem("Alumno",JSON.stringify(cursado))
 
 }
 
