@@ -21,6 +21,14 @@ let alumno5 = new Alumno("Gonzalo",27,5,7,5)
 
 const cursado=[alumno1,alumno2,alumno3,alumno4,alumno5]
 
+if(localStorage.getItem(Alumno)){
+    cursado=JSON.parse(localStorage.getItem(Alumno))
+}else{
+    cursado=cursado
+}
+
+
+
 //Agregar alumnos al Array
 function agregarAlumnos(){
     let nombre=prompt("Ingrese el nombre del alumno")
