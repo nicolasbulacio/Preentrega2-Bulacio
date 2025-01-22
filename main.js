@@ -1,6 +1,5 @@
 
 
-
 //Constructor de Alumnos
 function Alumno (nombre,edad,nota1,nota2,nota3) {
 
@@ -37,9 +36,18 @@ function agregarAlumnos(){
 
 // filtrar alumnos aprobados
 
-function filtrarEdad(){
-    let aprobado=cursado.filter(alumno=>alumno.promedio>=6)
+function filtrarAprobados(){
+    let aprobado=cursado.filter(alumno=>alumno.promedio()>=6)
     console.log(aprobado)
 
 }
-filtrarEdad()
+filtrarAprobados()
+
+//Botones
+
+let agregar=document.getElementById("agregar")
+agregar.addEventListener("click",agregarAlumnos)
+
+let filtrar=document.getElementById("mostrar")
+mostrar.addEventListener("click",filtrarAprobados)
+
