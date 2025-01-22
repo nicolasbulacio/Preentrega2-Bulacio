@@ -23,12 +23,11 @@ let cursado=[alumno1,alumno2,alumno3,alumno4,alumno5]
 
 //Local storage
 
-if(localStorage.getItem(Alumno)){
-    cursado=JSON.parse(localStorage.getItem(Alumno))
+if(localStorage.getItem("alumnos")){
+    cursado=JSON.parse(localStorage.getItem("alumnos"))
 }else{
     cursado=cursado
 }
-
 
 
 //Agregar alumnos al Array
@@ -41,7 +40,14 @@ function agregarAlumnos(){
 
     let alumno=new Alumno (nombre,edad,nota1,nota2,nota3)
     cursado.push(alumno)
-    localStorage.setItem("Alumno",JSON.stringify(cursado))
+    localStorage.setItem("alumnos",JSON.stringify(cursado))
+
+    Swal.fire({
+        title: 'Alumno agregado!',
+        text: `El alumno ${nombre} fue agregado con éxito.`,
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+    });
 
 }
 
@@ -49,10 +55,25 @@ function agregarAlumnos(){
 
 function filtrarAprobados(){
     let aprobado=cursado.filter(alumno=>alumno.promedio()>=6)
-    console.log(aprobado)
+    //console.log(aprobado)
+    if (aprobado.length > 0) {
+        let mensaje = aprobado.map(alumno => `${alumno.nombre} (Promedio: ${alumno.promedio()})`).join("\n");
+        Swal.fire({
+            title: 'Alumnos Aprobados',
+            text: mensaje,
+            icon: 'info',
+            confirmButtonText: 'Aceptar'
+        });
+    } else {
+        Swal.fire({
+            title: 'No hay alumnos aprobados',
+            text: 'No hay alumnos con promedio mayor o igual a 6.',
+            icon: 'warning',
+            confirmButtonText: 'Aceptar'
+        });}
 
 }
-filtrarAprobados()
+//filtrarAprobados()
 
 //Botones
 
