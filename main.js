@@ -1,49 +1,61 @@
 
-
-//Constructor de Alumnos
-function Alumno (nombre,nota1,nota2,nota3) {
-
-    this.nombre=nombre,
-    
-    this.nota1=nota1,
-    this.nota2=nota2,
-    this.nota3=nota3,
-    this.promedio=function(){return((nota1+nota2+nota3)/3)}
+function Alumno(nombre, nota1, nota2, nota3) {
+    this.nombre = nombre;
+    this.nota1 = parseFloat(nota1); 
+    this.nota2 = parseFloat(nota2); 
+    this.nota3 = parseFloat(nota3); 
+    this.promedio = function() {
+        return (this.nota1 + this.nota2 + this.nota3) / 3;
+    };
 }
 
-let alumno1 = new Alumno("Alejandro",8,9,9)
-let alumno2= new Alumno("Pedro",4,3,2)
-let alumno3 = new Alumno("Nicolas",5,9,10)
-let alumno4 = new Alumno("Juan",2,5,6)
-let alumno5 = new Alumno("Gonzalo",5,7,5)
 
-//Array de alumnos
-
-let cursado=[alumno1,alumno2,alumno3,alumno4,alumno5]
-
-//Local storage
-
+let cursado = [
+    new Alumno("Alejandro Pascal", 8, 9, 9),
+    new Alumno("Pedro Alondra", 4, 3, 2),
+    new Alumno("Nicolas Bulacio", 5, 9, 10),
+    new Alumno("Juan Maidana", 2, 5, 6),
+    new Alumno("Gonzalo Bulacio", 5, 7, 5)
+];
 
 
 if (localStorage.getItem("alumnos")) {
-    cursado = JSON.parse(localStorage.getItem("alumnos")).map(alumnoData => {
-        return new Alumno(alumnoData.nombre, alumnoData.nota1, alumnoData.nota2, alumnoData.nota3);
-    });
-} else {
-    cursado = cursado;
+    const alumnosGuardados = JSON.parse(localStorage.getItem("alumnos"));
+    
+    if (Array.isArray(alumnosGuardados) && alumnosGuardados.every(alumno => alumno.nombre && !isNaN(alumno.nota1) && !isNaN(alumno.nota2) && !isNaN(alumno.nota3))) {
+        cursado = alumnosGuardados.map(alumnoData => {
+            return new Alumno(alumnoData.nombre, alumnoData.nota1, alumnoData.nota2, alumnoData.nota3);
+        });
+    } else {
+        
+        localStorage.removeItem("alumnos");
+        cursado = cursado; 
+    }
 }
 
-//Agregar alumnos al Array
-function agregarAlumnos(){
-    let nombre=prompt("Ingrese el nombre del alumno")
-    
-    let nota1=prompt("Ingrese la nota del primer trimestre")
-    let nota2=prompt("Ingrese la nota del segundo trimestre")
-    let nota3=prompt("Ingrese la nota del tercer trimestre")
 
-    let alumno=new Alumno (nombre,nota1,nota2,nota3)
-    cursado.push(alumno)
-    localStorage.setItem("alumnos",JSON.stringify(cursado))
+function agregarAlumnos(event) {
+    event.preventDefault(); 
+
+    let nombre = document.getElementById("nombre").value;
+    let nota1 = document.getElementById("nota1").value;
+    let nota2 = document.getElementById("nota2").value;
+    let nota3 = document.getElementById("nota3").value;
+
+    
+    if (isNaN(nota1) || isNaN(nota2) || isNaN(nota3)) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Las notas deben ser números válidos.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+        return;
+    }
+
+    let alumno = new Alumno(nombre, nota1, nota2, nota3);
+    cursado.push(alumno);
+    localStorage.setItem("alumnos", JSON.stringify(cursado));
 
     Swal.fire({
         title: 'Alumno agregado!',
@@ -52,13 +64,13 @@ function agregarAlumnos(){
         confirmButtonText: 'Aceptar'
     });
 
+
+    document.getElementById("formularioAlumno").reset();
 }
 
-// filtrar alumnos aprobados
 
-function filtrarAprobados(){
-    let aprobado=cursado.filter(alumno=>alumno.promedio()>=6)
-    //console.log(aprobado)
+function filtrarAprobados() {
+    let aprobado = cursado.filter(alumno => alumno.promedio() >= 6);
     if (aprobado.length > 0) {
         let mensaje = aprobado.map(alumno => `${alumno.nombre} (Promedio: ${alumno.promedio()})`).join("\n");
         Swal.fire({
@@ -73,16 +85,16 @@ function filtrarAprobados(){
             text: 'No hay alumnos con promedio mayor o igual a 6.',
             icon: 'warning',
             confirmButtonText: 'Aceptar'
-        });}
-
+        });
+    }
 }
-//filtrarAprobados()
 
-//Botones
 
-let agregar=document.getElementById("agregar")
-agregar.addEventListener("click",agregarAlumnos)
+let agregarFormulario = document.getElementById("formularioAlumno");
+agregarFormulario.addEventListener("submit", agregarAlumnos);
 
-let filtrar=document.getElementById("mostrar")
-filtrar.addEventListener("click",filtrarAprobados)
-
+let filtrar = document.getElementById("mostrar");
+filtrar.addEventListener("click", function(event) {
+    event.preventDefault(); 
+    filtrarAprobados();
+});
