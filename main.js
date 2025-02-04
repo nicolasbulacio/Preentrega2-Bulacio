@@ -23,12 +23,19 @@ let cursado=[alumno1,alumno2,alumno3,alumno4,alumno5]
 
 //Local storage
 
-if(localStorage.getItem("alumnos")){
+/*if(localStorage.getItem("alumnos")){
     cursado=JSON.parse(localStorage.getItem("alumnos"))
 }else{
     cursado=cursado
-}
+}*/
 
+if (localStorage.getItem("alumnos")) {
+    cursado = JSON.parse(localStorage.getItem("alumnos")).map(alumnoData => {
+        return new Alumno(alumnoData.nombre, alumnoData.edad, alumnoData.nota1, alumnoData.nota2, alumnoData.nota3);
+    });
+} else {
+    cursado = cursado;
+}
 
 //Agregar alumnos al Array
 function agregarAlumnos(){
@@ -81,5 +88,5 @@ let agregar=document.getElementById("agregar")
 agregar.addEventListener("click",agregarAlumnos)
 
 let filtrar=document.getElementById("mostrar")
-mostrar.addEventListener("click",filtrarAprobados)
+filtrar.addEventListener("click",filtrarAprobados)
 
