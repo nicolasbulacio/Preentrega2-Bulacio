@@ -68,11 +68,15 @@ function agregarAlumnos(event) {
     document.getElementById("formularioAlumno").reset();
 }
 
-
 function filtrarAprobados() {
     let aprobado = cursado.filter(alumno => alumno.promedio() >= 6);
     if (aprobado.length > 0) {
-        let mensaje = aprobado.map(alumno => `${alumno.nombre} (Promedio: ${alumno.promedio()})`).join("\n");
+        let mensaje = aprobado.map(alumno => {
+            // Redondeamos el promedio a 2 decimales usando .toFixed(2)
+            let promedio = alumno.promedio().toFixed(2);
+            return `${alumno.nombre} (Promedio: ${promedio})`;
+        }).join("\n");
+
         Swal.fire({
             title: 'Alumnos Aprobados',
             text: mensaje,
@@ -88,7 +92,6 @@ function filtrarAprobados() {
         });
     }
 }
-
 
 let agregarFormulario = document.getElementById("formularioAlumno");
 agregarFormulario.addEventListener("submit", agregarAlumnos);
